@@ -4,12 +4,13 @@ jQuery.fn.autosave = function(options){
     var $this = $(this);
     var defaults = {
       data:{},
-      event: "change",
-      debug: false,
-      type: "html",
-      success: function(){},
-      error  : function(){},
-      before : function(){}
+      method: "POST",
+      event:  "change",
+      debug:  false,
+      type:   "html",
+      success:function(){},
+      error:  function(){},
+      before: function(){}
     };
     options = $.extend(defaults,options);
     $this.data('original-value', $this.val());
@@ -17,11 +18,13 @@ jQuery.fn.autosave = function(options){
 
     var event = data.event || options.event;
     var dataType = data.type || options.type;
+
     $this.on(event,function(e){
       var $el = $(this);
       data.value = $el.val();
       data = $.extend(data,getDataAttributes(this));
       var url = data.url ? data.url : options.url;
+      var url = data.method ? data.method : options.method;
       
       // No need to process the form if nothing actually changed
       if($el.val() == $el.data('original-value')) {
@@ -41,16 +44,19 @@ jQuery.fn.autosave = function(options){
       }
 
       $.ajax({
-        url:url,
-        data:data,
+        type: method,
+        url: url,
+        data: data,
         dataType: dataType,
-        success:function(data){
+        success: function(data){
           options.success(data,$el);
         },
         error:function(error){
           options.error(error,$el);
         }
       });
+
+      return true;
     });
   });
 
