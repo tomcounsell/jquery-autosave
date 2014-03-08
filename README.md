@@ -1,10 +1,10 @@
-# jquery.autosave.js
+# jquery-autosave
 
     //simple
     $("input").autosave();
 
-    //with options
-    $(".autosave-class").autosave({ url:"/save", success:function(){}, error:function(){} });
+    //awesomeness
+    $(".autosave").autosave({ url:"/save", success:function(){}, error:function(){} });
 
 That will bind a "change" event handler to all input elements, and post their values to the "/save" url each time the input value has changed. 
 
@@ -16,7 +16,7 @@ You can pass any of these options to the .autosave() function:
     <tr>
       <th>Option</th>
       <th>Type</th>
-      <th class="span3">Default</th>
+      <th>Default</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -31,7 +31,13 @@ You can pass any of these options to the .autosave() function:
       <td>url</td>
       <td>string</td>
       <td>null</td>
-      <td>Url use to post ajax data.</td>
+      <td>The URL to which the request is sent.</td>
+    </tr>
+    <tr>
+      <td>method</td>
+      <td>string</td>
+      <td>"POST"</td>
+      <td>The type of request to make, usually POST or GET. Other HTTP request methods, such as PUT and DELETE, can also be used here, but they are not supported by all browsers.</td>
     </tr>
     <tr>
       <td>event</td>
@@ -78,4 +84,4 @@ You can pass any of these options to the .autosave() function:
   </tbody>
 </table>
 
-originally forked from cfurrow/jquery.autosave.js
+originally forked from cfurrow/jquery.autosave.js at https://github.com/cfurrow/jquery.autosave.js
