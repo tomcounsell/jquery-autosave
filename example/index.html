@@ -2,47 +2,80 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-  <title>jquery.autosave.js - by cfurrow</title>
-
-  <link rel="stylesheet" type="text/css" href="../css/example.css" />
+  <title>jquery-autosave</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap3.custom.min.css" />
+  <style>
+    .example 
+    {
+        position: relative;
+        margin: 15px 0 0;
+        padding: 35px 10px 0;
+        background-color: white;
+        border: 1px solid #DDD;
+        border-radius: 4px 4px 0 0;
+    }
+    pre{border-radius: 0 0 4px 4px;}
+    
+    .example::after
+    {
+        content: attr(data-content);
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        padding: 3px 7px;
+        font-size: 12px;
+        font-weight: bold;
+        background-color: whiteSmoke;
+        border: 1px solid #DDD;
+        color: #9DA0A4;
+        border-radius: 4px 0 4px 0;
+    }
+  </style>
+  
 </head>
 <body>
   <div class="container">
-    <h1>jquery.autosave.js - by <a href="http://carlfurrow.com">Carl Furrow</a></h1>
+    <h1>jquery-autosave by <a href="http://www.tomcounsell.com">Tom Counsell</a></h1>
     <p>
-      jquery.autosave.js is a little plugin that can help auto-save input values to 
-      an ajax endpoint on your site so that user-input is constantly sync'd with the
-      backend database without full-page post backs.
+      A plugin that saves input values via AJAX as the user changes them.
+      Post data to your backend for constant synchronization.
+      <br>
+      forked from <a href="https://github.com/cfurrow/jquery.autosave.js">cfurrow/jquery.autosave.js</a>
     </p>
-    <h3>How do I use it?</h3>
+
+    <h3>How to use jquery-autosave (inline setup)</h3>
+    <p>Load jquery and this plugin found at src/jquery-autosave.js</p>
+      <pre>&lt;script&gt;
+  $("input").autosave();
+&lt;/script&gt;</pre>
+    
+    <div class="example" id="headertext" style="text-align: justify;" data-content="EXAMPLE 1">
+      <p>Set up your input fields with the data-url attributes:</p>
+    </div>
+    <pre>&lt;input type="text" id="my-input" name="my-input" value=""
+    data-url="/my_backend_uri" /&gt;</pre>
+    
+
+    <div class="example" id="headertext" style="text-align: justify;" data-content="EXAMPLE 2">
+      <p>Override defaults with additional data-* attributes:</p>
+    </div>
+    <pre>&lt;input type="text" id="my-input" name="my-input" value=""
+    data-url="/my_backend_uri"
+    data-method="GET"
+    data-event="blur,change"
+    data-something_else="extra information"
+    data-success="function(){alert('saved!');}" /&gt;</pre>
+
     <p>
-      There are a few ways you can use this plugin:
-      <ol>
-        <li>By defining some data-* attributes on your inputs</li>
-        <li>By defining some global options</li>
-      </ol>
-    </p>
-    <h3>Defining data-* attributes</h3>
-    <p>
-      An example of setting up some data-* attributes could be like so:
-      <pre> &lt;input type="text" name="someInput" data-url="/example" data-event="blur,change" data-id="1" value="original value" /&gt; </pre>
-      <ol>
-        <li><strong>data-url</strong>: The url that will be used to post the data.</li>
-        <li><strong>data-event</strong>: The jquery events used that will trigger the ajax post.</li>
-      </ol>
-    </p>
-    <p>
-      <strong>data-* attributes will override any global option set.</strong>
-    </p>
-    <p>
-      Starting the plugin:
-      <pre> $("input").autosave(); </pre>
-      And that's it! Now anytime you change or blur from any &lt;input&gt; element on the page, the plugin will look for the data-url
-      attribute on the element that was changed, and post data to that endpoint. It will also send all other data-* attributes, as well
+      
+      Done!
+      <br>
+      Now anytime there is a change or blur from any &lt;input&gt; element on the page, 
+      the elements new value will save to the specified url.
+      It will also send all other data-* attributes, as well
       as the 'name' and 'value' attributes.
 
-      Example:
+      Request Parameters Sent:
       <pre> { value:"original value", id:"1", event="blur,change", name="someInput" } </pre>
     </p>
     <h3>Defining global options</h3>
@@ -106,7 +139,12 @@
       </tbody>
     </table>
 
-    <h3>Live demo</h3>
+
+<strong>data-* attributes will override any global option set.</strong>
+
+
+
+    <h3>Example and Demo</h3>
     <p>
       View-source on the following examples to see how they work.
     </p>
@@ -132,6 +170,28 @@
         <span class="alert alert-danger fail hide">Fail!</span>
       </p>
     </form>
+
+    <h3>Pro Tip: Works on any element!</h3>
+    <p>
+      Use jquery-autosave on other elements besides text inputs.
+      <pre>&lt;textarea name="my-textarea" id="my-textarea"
+        data-url=""
+      &gt;&lt;/textarea&gt;</pre>
+    </p>
+
+    <h3>Pro Tip: Re-Post Failed Requests</h3>
+    <p>
+      You may decide to only autosave form values and altogether forgoe the traditional form submit.
+      You'll want to catch failed requsts and alert the user or quietly try to resend the request.
+      <pre></pre>
+    </p>
+    <p>
+      Requirements:
+      <pre>&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="application/javascript"&gt;&lt;/script&gt;
+&lt;script src="static_files/jquery-autosave.min.js" type="application/javascript"&gt;&lt;script&gt;
+&lt;/script&gt;</pre>
+    </p>
+
   </div>
   <script type="text/javascript" charset="utf-8" src="plugins.min.js"></script>
   <script type="text/javascript" charset="utf-8" src="../src/jquery.autosave.min.js"></script>
