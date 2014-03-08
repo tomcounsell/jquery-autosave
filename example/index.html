@@ -3,6 +3,18 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>jquery-autosave</title>
+  
+  <!--javascript-->
+  <script type="application/javascript" src="jquery-1.9.1.min.js"></script>
+  <script type="application/javascript" src="/src/jquery-autosave.min.js"></script>
+  <script>
+    function showSuccess(data,this){$this.siblings(".success").fadeIn();}
+    
+    //function hideAll(this){$this.siblings(".success,.fail").fadeOut();}
+    //function showError(error,this){$this.siblings(".fail").fadeIn();}
+  </script>
+  
+  <!--CSS-->
   <link rel="stylesheet" type="text/css" href="bootstrap3.custom.min.css" />
   <style>
     .example 
@@ -30,9 +42,11 @@
         color: #9DA0A4;
         border-radius: 4px 0 4px 0;
     }
+    h3{margin-top: 40px;}
+    .success, .fail{display: none;}
   </style>
-  
 </head>
+  
 <body>
   <div class="container">
     <h1>jquery-autosave by <a href="http://www.tomcounsell.com">Tom Counsell</a></h1>
@@ -44,48 +58,75 @@
     </p>
 
     <h3>How to use jquery-autosave (inline setup)</h3>
-    <p>Load jquery and this plugin found at src/jquery-autosave.js</p>
       <pre>&lt;script&gt;
   $("input").autosave();
 &lt;/script&gt;</pre>
     
-    <div class="example" id="headertext" style="text-align: justify;" data-content="EXAMPLE 1">
+    <p><strong>That was easy!</strong>
+      <br>
+      But don't forget to load jquery and this plugin found at src/jquery-autosave.js</p>
+    
+    <div class="example" data-content="EXAMPLE 1">
       <p>Set up your input fields with the data-url attributes:</p>
     </div>
-    <pre>&lt;input type="text" id="my-input" name="my-input" value=""
+    <pre>&lt;input type="text" name="my-input" value="original value"
     data-url="/my_backend_uri" /&gt;</pre>
     
+    <p>
+      <strong>All Done!</strong>
+      <br>
+      Of course there are loads more options available...
+    </p>
 
-    <div class="example" id="headertext" style="text-align: justify;" data-content="EXAMPLE 2">
+    <div class="example" data-content="EXAMPLE 2">
       <p>Override defaults with additional data-* attributes:</p>
     </div>
-    <pre>&lt;input type="text" id="my-input" name="my-input" value=""
+    <pre>&lt;input type="text" name="my-input" value="original value"
     data-url="/my_backend_uri"
     data-method="GET"
-    data-event="blur,change"
+    data-event="change"
     data-something_else="extra information"
     data-success="function(){alert('saved!');}" /&gt;</pre>
 
     <p>
-      
-      Done!
+      <strong>Now you're an All-Star!</strong>
       <br>
-      Now anytime there is a change or blur from any &lt;input&gt; element on the page, 
+      Whenever a change event happens any &lt;input&gt; element on the page, 
       the elements new value will save to the specified url.
       It will also send all other data-* attributes, as well
       as the 'name' and 'value' attributes.
-
-      Request Parameters Sent:
-      <pre> { value:"original value", id:"1", event="blur,change", name="someInput" } </pre>
     </p>
-    <h3>Defining global options</h3>
+    
     <p>
-      If you have many inputs you want to autosave, and don't want to define data-attributes on each of them, you can set some global options
-      like this:
-      <pre> $("input").autosave({url:"/example",event:"blur,change",id:"1"}); </pre>
-      That line of code is the equivalent to the above with data-* attributes defined.
+      <strong>Let's see what was sent.</strong>
+    </p>  
+    <div class="example" data-content="from EXAMPLE 1">
+      <p>Our first example makes a defualt POST request to "/my_backend_uri" with the following parameters.</p>
+    </div>  
+    <pre>{ value:"original value", name="my-input" }</pre>
+    
+    <div class="example" data-content="from EXAMPLE 1">
+      <p>The second example makes a GET request to "/my_backend_uri" so parameters will show in the url string.
+        <br>
+        Also if the request is successful, the success function will run. In this example, an alert box will show "saved!"
+      </p>
+    </div>  
+    <pre>/my_backend_uri?name=my-input&value=original%20value&something_else=extra%20information</pre>
+
+    <h3>How to use jquery-autosave (js setup), Tom's preferred method</h3>
+    <p>
+      When you have several inputs you want to autosave, repeating the same data-attrs is not usually the best practice.
     </p>
 
+    <div class="example" data-content="EXAMPLE">
+      <p>Set global options when loading the jquery-autosave plugin.</p>
+    </div>
+    <pre>$("input").autosave({
+    url:    "/my_backend_uri",
+    method: "POST",
+    event:  "change"
+});</pre>
+    
     <h3>Options</h3>
     <p>
       These options can be passed to the plugin.
@@ -95,7 +136,7 @@
         <tr>
           <th>Option</th>
           <th>Type</th>
-          <th class="span3">Default</th>
+          <th>Default</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -104,12 +145,18 @@
           <td>url</td>
           <td>string</td>
           <td>null</td>
-          <td>Url use to post ajax data.</td>
+          <td>The URL to which the request is sent.</td>
+        </tr>
+        <tr>
+          <td>method</td>
+          <td>string</td>
+          <td>"POST"</td>
+          <td>The type of request to make, usually POST or GET. Other HTTP request methods, such as PUT and DELETE, can also be used here, but they are not supported by all browsers.</td>
         </tr>
         <tr>
           <td>event</td>
           <td>string</td>
-          <td>change</td>
+          <td>"change"</td>
           <td>Event that causes the plugin to send data to your url. See <a href="http://api.jquery.com/on/">jQuery.on</a> for options.</td>
         </tr>
         <tr>
@@ -117,6 +164,12 @@
           <td>object</td>
           <td>null</td>
           <td>Object that holds all data that will be posted back to the url when the event is fired. You can set global default values to be sent here. All data-* attribute values end up here, minus "data-" (e.g. "data-id" becomes "id").</td>
+        </tr>
+        <tr>
+          <td>before</td>
+          <td>function</td>
+          <td>function($jqueryElement){}</td>
+          <td>Callback called just before a request is sent to the server. The jQuery element is passed to this method.</td>
         </tr>
         <tr>
           <td>success</td>
@@ -130,84 +183,108 @@
           <td>function(error,$jqueryElement){}</td>
           <td>Callback used when data was not saved, or there was an error. The jQuery element is passed to this method.</td>
         </tr>
-        <tr>
-          <td>before</td>
-          <td>function</td>
-          <td>function($jqueryElement){}</td>
-          <td>Callback called just before a request is sent to the server. The jQuery element is passed to this method.</td>
-        </tr>
       </tbody>
     </table>
 
-
-<strong>data-* attributes will override any global option set.</strong>
-
-
-
-    <h3>Example and Demo</h3>
+    <h3>Notes</h3>
     <p>
-      View-source on the following examples to see how they work.
+      <strong>Inline data-* attributes will override global options.</strong>
+      <br>
+      <strong>Textarea elements will by default use the inner html as the value.</strong>
     </p>
-    <form action="" method="POST">
-      <p>
-        <input type="text" name="someInput" class="span4" data-id="1" data-url="/api/updateinput" data-event="blur" value="I fail because I have a bad url" />
-        <span class="alert alert-success success hide">Success!</span>
-        <span class="alert alert-danger fail hide">Fail!</span>
-      </p>
-      <p>
-        <input type="text" name="someOtherInput" class="span4" data-id="1" data-url="" data-event="blur" value="I will succeed because my url is valid" />
-        <span class="alert alert-success success hide">Success!</span>
-        <span class="alert alert-danger fail hide">Fail!</span>
-      </p>
-      <p>
-        <input type="text" name="somethingElse" class="span4" data-id="1" value="I use global options" />
-        <span class="alert alert-success success hide">Success!</span>
-        <span class="alert alert-danger fail hide">Fail!</span>
-      </p>
-      <p>
-        <input type="text" name="somethingElse" class="span4" data-id="1" data-type="json" value="I use JSON dataType" />
-        <span class="alert alert-success success hide">Success!</span>
-        <span class="alert alert-danger fail hide">Fail!</span>
-      </p>
-    </form>
+    
+    <h3>Pro Tip #1: Autosave Anything!</h3>
+    <div class="example" data-content="EXAMPLE">
+      <p>Edit the selector to specify which elements should autosave.</p>
+    </div>
+    <pre>&lt;!--html--&gt;
+&lt;textarea name="my-textarea" class="autosave"&gt;&lt;/textarea&gt;
+&lt;select name="my-dropdown-select" class="autosave"/&gt;...&lt;/select&gt;
 
-    <h3>Pro Tip: Works on any element!</h3>
-    <p>
-      Use jquery-autosave on other elements besides text inputs.
-      <pre>&lt;textarea name="my-textarea" id="my-textarea"
-        data-url=""
-      &gt;&lt;/textarea&gt;</pre>
-    </p>
+//js
+$(".autosave").autosave({url:"/my_backend_uri"});
+</pre>
+    
+<!--    <h3>Pro Tip #2: Re-Send Failed Requests</h3>
+    If you forgo the traditional form submit altogether and only use autosaving, you'll want to catch and handle failed events. This is a wonderful, non-implemented feature. Have an idea?
+    <div class="example" data-content="EXAMPLE">
+      <p>
+        Should autosave quietly try the save request again? How many times?<br>
+        Perhaps the user is offline unknowingly?<br>
+        Should the user do something to re-fire 'change' events?
+      </p>
+    </div>
+    <pre>$(".autosave").autosave({
+    url:    "/my_backend_uri",
+    error:  function(error,$this){//you decide}
+});</pre>-->
 
-    <h3>Pro Tip: Re-Post Failed Requests</h3>
-    <p>
-      You may decide to only autosave form values and altogether forgoe the traditional form submit.
-      You'll want to catch failed requsts and alert the user or quietly try to resend the request.
-      <pre></pre>
-    </p>
-    <p>
-      Requirements:
-      <pre>&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="application/javascript"&gt;&lt;/script&gt;
-&lt;script src="static_files/jquery-autosave.min.js" type="application/javascript"&gt;&lt;script&gt;
-&lt;/script&gt;</pre>
-    </p>
+    <h3>Examples with Demo</h3>
+    <div class="example" data-content="DEMO 1">
+      <p>Autosave the contents of a basic text input to the inline data-url.<br>
+        A success function is thrown so we can see if it works.
+      </p>
+      <ul class="list-inline">
+        <li>
+          <input type="text" id="ex1" name="input1" data-url="fake_backend.json" value=""
+                 placeholder="try me!"/>
+        </li>
+        <li><span class="alert alert-success success">Success!</span></li>
+        <li><span class="alert alert-danger fail">Fail!</span></li>
+      </ul>
+      <script>
+        $('input').autosave({url:"fake_backend.json",success:function(){alert('saved!')}})
+      </script>
+    </div>
+    <pre>&lt;!--html--&gt;
+&lt;input type="text" name="input1" value="" placeholder="try me!"
+    data-url="my_backend"/&gt;
 
-  </div>
-  <script type="text/javascript" charset="utf-8" src="plugins.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="../src/jquery.autosave.min.js"></script>
-  <script type="text/javascript" charset="utf-8">
-    function successCallback(data,$jq){
-      $jq.find("~.success").fadeIn();
+//js
+$('input').autosave(
+  {success:function(){alert('saved!')}}
+);
+</pre>
+      
+    
+    <div class="example" data-content="DEMO 2">
+      <p>Count clicks on a button!</p>
+      
+      <ul class="list-inline">
+        <li>
+          <button class="autosave btn"
+                data-clicks="0"
+          >Click Me</button>
+        </li>
+      </ul>
+      
+      <script>
+        $(".autosave").autosave({
+          url:"fake_backend.json",
+          method:"POST",
+          success:function(data,$this){
+            num_clicks=$this.attr('data-clicks');
+            $this.attr('data-clicks') = parseInt(num_clicks) + 1
+          }
+        });
+      </script>
+    </div>
+    <pre>&lt;!--html--&gt;
+&lt;button class="autosave btn" data-clicks="0"
+    &gt;Click Me&lt;/button&gt;
+
+//js
+$('.autosave').autosave({
+    url:"my_backend_uri",
+    method:"POST",
+    success:function(data,$this){
+      num_clicks=$this.attr('data-clicks');
+      $this.attr('data-clicks') = parseInt(num_clicks) + 1
     }
-    function errorCallback(error,$jq){
-      $jq.find("~.fail").fadeIn();
-    }
-    function beforeCallback($jq){
-      console.log(this);
-      $jq.siblings(".success,.fail").fadeOut();
-    }
+});
+</pre>
+    
 
-    $("input").autosave({url:"",success:successCallback,error:errorCallback,before:beforeCallback});
-  </script>
+  </div>  
 </body>
 </html>
