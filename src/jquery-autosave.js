@@ -5,6 +5,7 @@ jQuery.fn.autosave = function(options){
     var defaults = {
       data:{},
       method: "POST",
+      url:    "/",
       event:  "change",
       debug:  false,
       type:   "html",
@@ -12,66 +13,60 @@ jQuery.fn.autosave = function(options){
       error:  function(){},
       before: function(){}
     };
-    options = $.extend(defaults,options);
-    $this.data('original-value', $this.val());
-    var data = getDataAttributes(this);
+    options = $.extend(defaults,options); //options overwrite defaults
+    var inline_options = getDataAttributes(this);
+    var event = inline_options.event || options.event;
+    var dataType = inline_options.type || options.type;
 
-    var event = data.event || options.event;
-    var dataType = data.type || options.type;
-
+    data = inline_options
+    
     $this.on(event,function(e){
-      var $el = $(this);
-      data.value = $el.val();
-      data = $.extend(data,getDataAttributes(this));
-      var url = data.url ? data.url : options.url;
-      var url = data.method ? data.method : options.method;
-      
-      // No need to process the form if nothing actually changed
-      if($el.val() == $el.data('original-value')) {
-        e.preventDefault();
-        return false;
-      }
+      var $element = $(this);
+      data.value = $element.val();
+      data = $.extend(data, getDataAttributes(this));
+      var url = data.url || options.url;
+      var method = data.method || options.method;
 
       if(options.before){
-        options.before.call(this,$el);
+        options.before.call(this,$element);
       }
       
-      // If Debugging is turned on, log the data var
-      if(options.debug) {
+      if(!options.debug) { // Unless in Debug Mode
+        $.ajax({
+          type: method,
+          url: url,
+          data: data,
+          dataType: dataType,
+          success: function(data){
+            options.success(data,$element);
+          },
+          error:function(error){
+            options.error(error,$element);
+          }
+        });
+        return true;
+        
+      }else{
         console.log(data);
         e.preventDefault();
         return false;
       }
-
-      $.ajax({
-        type: method,
-        url: url,
-        data: data,
-        dataType: dataType,
-        success: function(data){
-          options.success(data,$el);
-        },
-        error:function(error){
-          options.error(error,$el);
-        }
-      });
-
-      return true;
     });
   });
 
-  function getDataAttributes(el){
-    var rDataAttr = /^data\-(\w+)$/;
-    var attrs = {};
-    attrs.value = el.value;
-    attrs.name  = el.name;
+  function getDataAttributes(element){
+    var data_attribute_regex = /^data\-(\w+)$/;
+    var data_attributes = {};
+    data_attributes.value = element.value || "";
+    data_attributes.name  = element.name || "";
 
-    $.each(el.attributes,function(index,attr){
-      if(rDataAttr.test(attr.nodeName)){
-        attrs[rDataAttr.exec(attr.nodeName)[1]] = attr.value;
+    $.each(element.attributes,function(index,attribute){
+      if(data_attribute_regex.test(attribute.nodeName)){
+        attribute_name = data_attribute_regex.exec(attribute.nodeName)[1]
+        data_attributes[attribute_name] = attribute.value;
       }
     });
-    return attrs;
+    return data_attributes;
   }
   
 };
