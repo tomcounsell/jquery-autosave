@@ -223,14 +223,20 @@ $(".autosave").autosave({url:"/my_backend_uri"});
       </p>
       <ul class="list-inline">
         <li>
-          <input type="text" id="ex1" name="input1" data-url="fake_backend.json" value=""
+          <input type="text" name="my-input" data-url="fake_backend.json" value=""
                  placeholder="try me!"/>
         </li>
         <li><span class="alert alert-success success">Success!</span></li>
         <li><span class="alert alert-danger fail">Fail!</span></li>
       </ul>
       <script>
-        $('input').autosave({url:"fake_backend.json",method:"GET",success:function(){alert('saved!')}})
+        $('input').autosave({
+          url:"fake_backend.json",
+          method:"GET",
+          type:"json",
+          data:{'cats':18},
+          success:function(){alert('saved!');}
+        });
       </script>
     </div>
     <pre>&lt;!--html--&gt;
@@ -248,8 +254,9 @@ $('input').autosave(
       
       <ul class="list-inline">
         <li>
-          <button class="autosave btn"
-                data-clicks="0"
+          <button class="autosave btn" name="click-me-button"
+                  data-clicks="0"
+                  data-success="function(data,$element){alert($element.attr('data-clicks')++);}"
           >Click Me</button>
         </li>
       </ul>
@@ -258,23 +265,20 @@ $('input').autosave(
         $(".autosave").autosave({
           url:"fake_backend.json",
           method:"GET",
-          event:"onclick",
-          success:function(data,$this){
-            num_clicks=$this.attr('data-clicks');
-            $this.attr('data-clicks') = parseInt(num_clicks) + 1
-          }
+          event:"click",
+          type:"json"
         });
       </script>
     </div>
     <pre>&lt;!--html--&gt;
 &lt;button class="autosave btn" data-clicks="0"
-    &gt;Click Me&lt;/button&gt;
+&gt;Click Me&lt;/button&gt;
 
 //js
 $('.autosave').autosave({
     url:      "my_backend_uri",
     method:   "GET",
-    event:    "onclick",
+    event:    "click",
     success:  function(data,$this){
                 num_clicks=$this.attr('data-clicks');
                 $this.attr('data-clicks') = parseInt(num_clicks) + 1
