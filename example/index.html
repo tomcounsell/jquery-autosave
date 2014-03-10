@@ -83,7 +83,7 @@
     data-method="GET"
     data-event="change"
     data-something_else="extra information"
-    data-success="function(){alert('saved!');}" /&gt;</pre>
+    data-done="function(){alert('saved!');}" /&gt;</pre>
 
     <p>
       <strong>Now you're an All-Star!</strong>
@@ -105,7 +105,7 @@
     <div class="example" data-content="from EXAMPLE 1">
       <p>The second example makes a GET request to "/my_backend_uri" so parameters will show in the url string.
         <br>
-        Also if the request is successful, the success function will run. In this example, an alert box will show "saved!"
+        Also if the request is successful, the 'done' function will run. In this example, an alert box will show "saved!"
       </p>
     </div>  
     <pre>/my_backend_uri?name=my-input&value=original%20value&something_else=extra%20information</pre>
@@ -169,13 +169,13 @@
           <td>Callback called just before a request is sent to the server. The jQuery element is passed to this method.</td>
         </tr>
         <tr>
-          <td>success</td>
+          <td>done</td>
           <td>function</td>
           <td>function(data,$jqueryElement){}</td>
           <td>Callback used when data was saved successfully. The data returned from the ajax request, plus the jQuery element are passed to this method.</td>
         </tr>
         <tr>
-          <td>error</td>
+          <td>fail</td>
           <td>function</td>
           <td>function(error,$jqueryElement){}</td>
           <td>Callback used when data was not saved, or there was an error. The jQuery element is passed to this method.</td>
@@ -231,11 +231,11 @@ $(".autosave").autosave({url:"/my_backend_uri"});
       </ul>
       <script>
         $('input').autosave({
-          url:"fake_backend.json",
-          method:"GET",
-          type:"json",
-          data:{'cats':18},
-          success:function(){alert('saved!');}
+          url:    "fake_backend.json",
+          method: "GET",
+          type:   "json",
+          data:   {'cats':18},
+          done:   function(){alert('saved!');}
         });
       </script>
     </div>
@@ -245,7 +245,7 @@ $(".autosave").autosave({url:"/my_backend_uri"});
 
 //js
 $('input').autosave(
-  {success:function(){alert('saved!')}}
+  {done:function(){alert('saved!')}}
 );
 </pre>
     
@@ -256,17 +256,21 @@ $('input').autosave(
         <li>
           <button class="autosave btn" name="click-me-button"
                   data-clicks="0"
-                  data-success="function(data,$element){alert($element.attr('data-clicks')++);}"
+                  data-done=""
           >Click Me</button>
         </li>
       </ul>
       
       <script>
         $(".autosave").autosave({
-          url:"fake_backend.json",
-          method:"GET",
-          event:"click",
-          type:"json"
+          url:    "fake_backend.json",
+          method: "GET",
+          event:  "click",
+          type:   "json",
+          before: function(){
+                     var clicks = $(this).attr('data-clicks');
+                     $(this).attr('data-clicks', parseInt(clicks)+1);
+                   }
         });
       </script>
     </div>
@@ -279,9 +283,9 @@ $('.autosave').autosave({
     url:      "my_backend_uri",
     method:   "GET",
     event:    "click",
-    success:  function(data,$this){
-                num_clicks=$this.attr('data-clicks');
-                $this.attr('data-clicks') = parseInt(num_clicks) + 1
+    before:   function(){
+                var clicks = $(this).attr('data-clicks');
+                $(this).attr('data-clicks', parseInt(clicks)+1);
               }
 });
 </pre>
