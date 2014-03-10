@@ -13,19 +13,15 @@ jQuery.fn.autosave = function(options){
       error:  function(){},
       before: function(){}
     };
-    options = $.extend(defaults,options); //options overwrite defaults
+    options = $.extend(defaults, options); //options overwrite defaults
     var inline_options = getDataAttributes(this);
     var event = inline_options.event || options.event;
-    var dataType = inline_options.type || options.type;
-
-    data = inline_options
     
     $this.on(event,function(e){
       var $element = $(this);
-      data.value = $element.val();
-      data = $.extend(data, getDataAttributes(this));
-      var url = data.url || options.url;
-      var method = data.method || options.method;
+      var inline_options = getDataAttributes(this); //get latest inline options
+      options = $.extend(options, inline_options); //inline options overwrite options
+      var data = $.extend(options.data, inline_options) //include all inline options in data
 
       if(options.before){
         options.before.call(this,$element);
@@ -33,15 +29,15 @@ jQuery.fn.autosave = function(options){
       
       if(!options.debug) { // Unless in Debug Mode
         $.ajax({
-          type: method,
-          url: url,
-          data: data,
-          dataType: dataType,
+          url:      options.url,
+          type:     options.method,
+          data:     data,
+          dataType: options.type,
           success: function(data){
-            options.success(data,$element);
+            options.success.call(data,$element);
           },
           error:function(error){
-            options.error(error,$element);
+            options.error.call(error,$element);
           }
         });
         return true;
