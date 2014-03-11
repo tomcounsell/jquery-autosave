@@ -316,26 +316,65 @@ $('.autosave').autosave({
 </pre>
     
     <div class="example" data-content="TESTS">
-      <p>Testing all the options. View the source if you like!</p>
+      <p>Testing all the option combinations. View the source if you like!</p>
       <ul class="list-inline">
         <li>
-          <input id="test1" class="autosave-test" name="">
+          <input id="test0" class="autosave-test" name="test0" placeholder="test0">
         </li>
         <li>
-          <input id="test2" class="autosave-test" name="">
+          <input id="test1" class="autosave-test" name="test1" placeholder="test1"
+                 data-url="fake_backend.html"
+                 data-method="GET"
+                 data-event="keyup"
+                 data-type="html"
+                 data-foo="123"
+                 data-bar="456"
+                 data-debug="true">
         </li>
         <li>
-          <input id="test3" class="autosave-test" name="">
+          <input id="test2" class="autosave-test" name="test2" placeholder="test2">
+        </li>
+        <li>
+          <input id="test3" class="autosave-test" name="test3" placeholder="test3">
         </li>
       </ul>
       
       <script>
-        $('.autosave-test').autosave({
-          url:"fake_backend.html"
-          //use all defaults
+        // use all defaults, should create failed POST requests to this page
+        // include {method: "GET"} to make pass
+        $('#test0').autosave();
+        
+        // test all inline options
+        $('#test1').autosave();
+        
+        // test all options set here in javascript
+        $('#test2').autosave({
+          url:    "fake_backend.html",
+          method: "GET",
+          event:  "keyup",
+          type:   "html",
+          data:   {'foo':"123", 'bar':"456"},
+          debug:  "true"
         });
         
-        $('')
+        // test callback functions
+        // change method to POST to make fail
+        $('#test3').autosave({
+          url:    "fake_backend.html",
+          method: "GET", 
+          before: function(){
+            console.log("before saving "+$(this).attr('name')+" = "+$(this).val());
+          },
+          done:   function(){
+            console.log("done saving "+$(this).attr('name')+" = "+$(this).val());
+          },
+          fail:   function(){
+            console.log("failed saving "+$(this).attr('name')+" = "+$(this).val());
+          },
+          always: function(){
+            console.log("finished processsing "+$(this).attr('name')+" = "+$(this).val());
+          }
+        });
         
       </script>
     </div>
