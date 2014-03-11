@@ -3,10 +3,12 @@
     //simple
     $("input").autosave();
 
-    //awesomeness
-    $(".autosave").autosave({ url:"/save", success:function(){}, error:function(){} });
+Watches change events on all inputs, POSTing their values to your backend.
 
-That will bind a "change" event handler to all input elements, and post their values to the "/save" url each time the input value has changed. 
+    //awesomeness
+    $(".autosave").autosave({ url:"/save", done:function(){}, fail:function(){} });
+
+POST the values and data-* attrs of any element to your "/save" uri and optionally write callbacks just like $.ajax
 
 
 ## Options
