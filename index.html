@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>jquery-autosave by tomcounsell</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>jquery-autosave</h1>
+        <p>Autosave form fields as they change. Flexible to automate ajax requests on any element event.</p>
+
+        <p class="view"><a href="https://github.com/tomcounsell/jquery-autosave">View the Project on GitHub <small>tomcounsell/jquery-autosave</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/tomcounsell/jquery-autosave/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/tomcounsell/jquery-autosave/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/tomcounsell/jquery-autosave">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="jquery-autosave" class="anchor" href="#jquery-autosave"><span class="octicon octicon-link"></span></a>jquery-autosave</h1>
+
+<pre><code>//simple
+$("input").autosave();
+</code></pre>
+
+<p>Watches change events on all inputs, POSTing their values to your backend.</p>
+
+<pre><code>//awesomeness
+$(".autosave").autosave({ url:"/save", done:function(){}, fail:function(){} });
+</code></pre>
+
+<p>POST the values and data-* attrs of any element to your "/save" uri and optionally write callbacks just like $.ajax</p>
+
+<h2>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>You can pass any of these options to the .autosave() function:</p>
+
+<table>
+<thead><tr>
+<th>Option</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr></thead>
+<tbody>
+<tr>
+<td>url</td>
+      <td>string</td>
+      <td>null</td>
+      <td>The URL to which the request is sent.</td>
+    </tr>
+<tr>
+<td>method</td>
+      <td>string</td>
+      <td>"POST"</td>
+      <td>The type of request to make, usually POST or GET. Other HTTP request methods, such as PUT and DELETE, can also be used here, but they are not supported by all browsers.</td>
+    </tr>
+<tr>
+<td>event</td>
+      <td>string</td>
+      <td>"change"</td>
+      <td>Event that causes the plugin to send data to your url. See <a href="http://api.jquery.com/on/">jQuery.on</a> for options.</td>
+    </tr>
+<tr>
+<td>type</td>
+      <td>string</td>
+      <td>"html"</td>
+      <td>Specify the dataType you are expecting (xml, json, script, or html)</td>
+    </tr>
+<tr>
+<td>data</td>
+      <td>object</td>
+      <td>null</td>
+      <td>Object that holds all data that will be posted back to the url when the event is fired. You can set global default values to be sent here. All data-* attribute values end up here, minus "data-" (e.g. "data-id" becomes "id").</td>
+    </tr>
+<tr>
+<td>debug</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Will stop any requests from being performed and will console.log the data variable inside of the autosave library</td>
+    </tr>
+<tr>
+<td>before</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback called just before a request is sent to the server.</td>
+    </tr>
+<tr>
+<td>done</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when the ajax call was successfull.</td>
+    </tr>
+<tr>
+<td>fail</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when ajax call failed, or there was an error. Note: If you specify a 'type', it must match the response or even a 200 (ok) response will show as failed.</td>
+    </tr>
+<tr>
+<td>always</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when when finished, whether successful or not.</td>
+    </tr>
+</tbody>
+</table><p>originally forked from cfurrow/jquery.autosave.js at <a href="https://github.com/cfurrow/jquery.autosave.js">https://github.com/cfurrow/jquery.autosave.js</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/tomcounsell">tomcounsell</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
