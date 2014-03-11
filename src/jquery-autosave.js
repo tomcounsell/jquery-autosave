@@ -2,8 +2,9 @@ jQuery.fn.autosave = function(options){
   var $ = jQuery;
   $.each(this,function(){
     var $this = $(this);
+    
     var defaults = {
-      url:    "/",
+      url:    "",
       method: "POST",
       event:  "change",
       data:   {},
@@ -15,10 +16,6 @@ jQuery.fn.autosave = function(options){
       always: function(){}
     };
     
-    //console.log(defaults)
-    console.log(options)
-    //console.log($this)
-    
     options = $.extend(defaults, options); //options overwrite defaults
     var inline_options = getDataAttributes(this);
     var event = inline_options.event || options.event;
@@ -27,15 +24,22 @@ jQuery.fn.autosave = function(options){
       var $element = $(this);
 
       if(options.before){
-        options.before.call(this); // call in the context of the element
+        options.before.call($this); // call in the context of the element
       }
       
       var inline_options = getDataAttributes(this); //get latest inline options
       options = $.extend(options, inline_options); //inline options overwrite options
       var data = $.extend(options.data, inline_options) //include all inline options in data
       
-      console.log(options)
-      //console.log(inline_options)
+      //if data.debug included as string, change to boolean
+      if (options.debug == "false"){ options.debug = false; }
+      
+      //remove url, method, type, debug from request params, add event
+      delete data.url; 
+      delete data.method; 
+      delete data.type; 
+      delete data.debug;
+      data.event = options.event;
       
       if(!options.debug) { // Unless in Debug Mode
         
@@ -45,9 +49,9 @@ jQuery.fn.autosave = function(options){
           cache:    false,
           data:     data,
           dataType: options.type
-        }).done(function(response){ $this.trigger('autosave-done');
-        }).fail(function(){ $this.trigger('autosave-fail');
-        }).always(function(response){ $this.trigger('autosave-always');
+        }).done(function(){   $this.trigger('autosave-done');
+        }).fail(function(){   $this.trigger('autosave-fail');
+        }).always(function(){ $this.trigger('autosave-always');
         });
         return true;
         
@@ -56,7 +60,7 @@ jQuery.fn.autosave = function(options){
         e.preventDefault();
         return false;
       }
-    });
+    }); //end applying event handler
     
     if (options.done){
       $this.on('autosave-done', function(){ options.done.call($this) });
@@ -67,8 +71,7 @@ jQuery.fn.autosave = function(options){
     if (options.always){
       $this.on('autosave-always', function(){ options.always.call($this) });
     }
-    
-  });
+  }); //end applying callback functions
 
   function getDataAttributes(element){
     var data_attribute_regex = /^data\-(\w+)$/;
@@ -82,7 +85,8 @@ jQuery.fn.autosave = function(options){
         data_attributes[attribute_name] = attribute.value;
       }
     });
+    
     return data_attributes;
-  }
+  }// end getDataAttributes()
   
-};
+}; //end autosave
