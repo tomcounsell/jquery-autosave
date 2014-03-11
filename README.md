@@ -22,12 +22,6 @@ You can pass any of these options to the .autosave() function:
   </thead>
   <tbody>
     <tr>
-      <td>method</td>
-      <td>string</td>
-      <td>'POST'</td>
-      <td>The type of request to make ('POST' or 'GET'). Note: 'PUT' and 'DELETE' can also be used here, but they are not supported by all browsers.</td>
-    </tr>
-    <tr>
       <td>url</td>
       <td>string</td>
       <td>null</td>
@@ -42,8 +36,14 @@ You can pass any of these options to the .autosave() function:
     <tr>
       <td>event</td>
       <td>string</td>
-      <td>'change'</td>
-      <td>Event that causes the plugin to send data to your url. See <a href="http://api.jquery.com/on/">jQuery.bind</a> for options.</td>
+      <td>"change"</td>
+      <td>Event that causes the plugin to send data to your url. See <a href="http://api.jquery.com/on/">jQuery.on</a> for options.</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>string</td>
+      <td>"html"</td>
+      <td>Specify the dataType you are expecting (xml, json, script, or html)</td>
     </tr>
     <tr>
       <td>data</td>
@@ -58,28 +58,28 @@ You can pass any of these options to the .autosave() function:
       <td>Will stop any requests from being performed and will console.log the data variable inside of the autosave library</td>
     </tr>
     <tr>
-      <td>type</td>
-      <td>string</td>
-      <td>html</td>
-      <td>Specify the dataType you are expecting (xml, json, script, or html)</td>
-    </tr>
-    <tr>
-      <td>success</td>
-      <td>function</td>
-      <td>function(data,$jqueryElement){}</td>
-      <td>Callback used when data was saved successfully. The data returned from the ajax request, plus the jQuery element are passed to this method.</td>
-    </tr>
-    <tr>
-      <td>error</td>
-      <td>function</td>
-      <td>function(error,$jqueryElement){}</td>
-      <td>Callback used when data was not saved, or there was an error. The jQuery element is passed to this method.</td>
-    </tr>
-    <tr>
       <td>before</td>
       <td>function</td>
-      <td>function($jqueryElement){}</td>
-      <td>Callback called just before a request is sent to the server. The jQuery element is passed to this method.</td>
+      <td>function(){}</td>
+      <td>Callback called just before a request is sent to the server.</td>
+    </tr>
+    <tr>
+      <td>done</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when the ajax call was successfull.</td>
+    </tr>
+    <tr>
+      <td>fail</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when ajax call failed, or there was an error. Note: If you specify a 'type', it must match the response or even a 200 (ok) response will show as failed.</td>
+    </tr>
+    <tr>
+      <td>always</td>
+      <td>function</td>
+      <td>function(){}</td>
+      <td>Callback used when when finished, whether successful or not.</td>
     </tr>
   </tbody>
 </table>

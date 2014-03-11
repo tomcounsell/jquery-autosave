@@ -82,8 +82,7 @@
     data-url="/my_backend_uri"
     data-method="GET"
     data-event="change"
-    data-something_else="extra information"
-    data-done="function(){alert('saved!');}" /&gt;</pre>
+    data-something_else="extra information"/&gt;</pre>
 
     <p>
       <strong>Now you're an All-Star!</strong>
@@ -98,7 +97,7 @@
       <strong>Let's see what was sent.</strong>
     </p>  
     <div class="example" data-content="from EXAMPLE 1">
-      <p>Our first example makes a defualt POST request to "/my_backend_uri" with the following parameters.</p>
+      <p>The first example makes a defualt POST request to "/my_backend_uri" with the following parameters.</p>
     </div>  
     <pre>{ value:"original value", name="my-input" }</pre>
     
@@ -112,11 +111,11 @@
 
     <h3>How to use jquery-autosave (js setup), Tom's preferred method</h3>
     <p>
-      When you have several inputs you want to autosave, repeating the same data-attrs is not usually the best practice.
+      When you have several inputs you want to autosave, repeating the same data-* attributes is not usually the best practice. Consider including some settings when you apply the plugin.
     </p>
 
     <div class="example" data-content="EXAMPLE">
-      <p>Set global options when loading the jquery-autosave plugin.</p>
+      <p>Set global options that apply to all the input elements on the page. Now you don't need to change any of your html!</p>
     </div>
     <pre>$("input").autosave({
     url:    "/my_backend_uri",
@@ -157,42 +156,60 @@
           <td>Event that causes the plugin to send data to your url. See <a href="http://api.jquery.com/on/">jQuery.on</a> for options.</td>
         </tr>
         <tr>
+          <td>type</td>
+          <td>string</td>
+          <td>"html"</td>
+          <td>Specify the dataType you are expecting (xml, json, script, or html)</td>
+        </tr>
+        <tr>
           <td>data</td>
           <td>object</td>
           <td>null</td>
-          <td>Object that holds all data that will be posted back to the url when the event is fired. You can set global default values to be sent here. All data-* attribute values end up here, minus "data-" (e.g. "data-id" becomes "id").</td>
+          <td>Object that holds all data that will be posted back to the url when the event is fired. You can set global default values to be sent here. All data-* attribute values end up here, minus "data-" (e.g. "data-foo" becomes "foo").</td>
+        </tr>
+        <tr>
+          <td>debug</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>Will stop any requests from being performed and will console.log the data variable inside of the autosave library</td>
         </tr>
         <tr>
           <td>before</td>
           <td>function</td>
-          <td>function($jqueryElement){}</td>
-          <td>Callback called just before a request is sent to the server. The jQuery element is passed to this method.</td>
+          <td>function(){}</td>
+          <td>Callback called just before a request is sent to the server.</td>
         </tr>
         <tr>
           <td>done</td>
           <td>function</td>
-          <td>function(data,$jqueryElement){}</td>
-          <td>Callback used when data was saved successfully. The data returned from the ajax request, plus the jQuery element are passed to this method.</td>
+          <td>function(){}</td>
+          <td>Callback used when the ajax call was successfull.</td>
         </tr>
         <tr>
           <td>fail</td>
           <td>function</td>
-          <td>function(error,$jqueryElement){}</td>
-          <td>Callback used when data was not saved, or there was an error. The jQuery element is passed to this method.</td>
+          <td>function(){}</td>
+          <td>Callback used when ajax call failed, or there was an error. Note: If you specify a 'type', it must match the response or even a 200 (ok) response will show as failed.</td>
+        </tr>
+        <tr>
+          <td>always</td>
+          <td>function</td>
+          <td>function(){}</td>
+          <td>Callback used when when finished, whether successful or not.</td>
         </tr>
       </tbody>
     </table>
 
     <h3>Notes</h3>
     <p>
-      <strong>Inline data-* attributes will override global options.</strong>
+      <strong>Inline data-* attributes will override global options.</strong> However the callback functions (before, done, fail, and always) must be passed in via the javascript, not as data-* attributes in the html.
       <br>
-      <strong>Textarea elements will by default use the inner html as the value.</strong>
+      <strong>Textarea elements</strong> automatically use the inner html as the value when saving.
     </p>
     
     <h3>Pro Tip #1: Autosave Anything!</h3>
     <div class="example" data-content="EXAMPLE">
-      <p>Edit the selector to specify which elements should autosave.</p>
+      <p>Edit the selector to specify which elements should autosave. It's not just for input fields!</p>
     </div>
     <pre>&lt;!--html--&gt;
 &lt;textarea name="my-textarea" class="autosave"&gt;&lt;/textarea&gt;
@@ -223,17 +240,16 @@ $(".autosave").autosave({url:"/my_backend_uri"});
       </p>
       <ul class="list-inline">
         <li>
-          <input type="text" name="my-input" data-url="fake_backend.json" value=""
+          <input type="text" id="ex1" name="my-input" data-url="fake_backend.html" value=""
                  placeholder="try me!"/>
         </li>
         <li><span class="alert alert-success success">Success!</span></li>
         <li><span class="alert alert-danger fail">Fail!</span></li>
       </ul>
       <script>
-        $('input').autosave({
-          url:    "fake_backend.json",
+        $('input#ex1').autosave({
+          url:    "fake_backend.html",
           method: "GET",
-          type:   "json",
           data:   {'cats':18},
           done:   function(){alert('saved!');}
         });
@@ -254,43 +270,76 @@ $('input').autosave(
       
       <ul class="list-inline">
         <li>
-          <button class="autosave btn" name="click-me-button"
+          <button class="autosave btn" id='ex2' name="click-me-button"
                   data-clicks="0"
-                  data-done=""
           >Click Me</button>
+        </li>
+        <li>
+          <p><span id='num_clicks'>0</span> clicks saved</p>
         </li>
       </ul>
       
       <script>
-        $(".autosave").autosave({
-          url:    "fake_backend.json",
+        $(".autosave#ex2").autosave({
+          url:    "fake_backend.html",
           method: "GET",
           event:  "click",
-          type:   "json",
           before: function(){
-                     var clicks = $(this).attr('data-clicks');
-                     $(this).attr('data-clicks', parseInt(clicks)+1);
-                   }
+                    //increment the clicks counter before sending
+                    var clicks = $(this).attr('data-clicks');
+                    $(this).attr('data-clicks', parseInt(clicks)+1);
+                  },
+          done:   function(){
+                    //if successful, update the front-end
+                    $('#num_clicks').html($(this).attr('data-clicks'));
+                  }
         });
       </script>
     </div>
     <pre>&lt;!--html--&gt;
-&lt;button class="autosave btn" data-clicks="0"
-&gt;Click Me&lt;/button&gt;
+&lt;button class="autosave" data-clicks="0"&gt;Click Me&lt;/button&gt;
 
 //js
 $('.autosave').autosave({
     url:      "my_backend_uri",
-    method:   "GET",
     event:    "click",
     before:   function(){
-                var clicks = $(this).attr('data-clicks');
-                $(this).attr('data-clicks', parseInt(clicks)+1);
+                  //increment the clicks counter before sending
+                  var clicks = $(this).attr('data-clicks');
+                  $(this).attr('data-clicks', parseInt(clicks)+1);
+              },
+    done:     function(){
+                  //if successful, update the front-end
+                  $('#num_clicks').html($(this).attr('data-clicks'));
               }
 });
 </pre>
     
-
-  </div>  
+    <div class="example" data-content="TESTS">
+      <p>Testing all the options. View the source if you like!</p>
+      <ul class="list-inline">
+        <li>
+          <input id="test1" class="autosave-test" name="">
+        </li>
+        <li>
+          <input id="test2" class="autosave-test" name="">
+        </li>
+        <li>
+          <input id="test3" class="autosave-test" name="">
+        </li>
+      </ul>
+      
+      <script>
+        $('.autosave-test').autosave({
+          url:"fake_backend.html"
+          //use all defaults
+        });
+        
+        $('')
+        
+      </script>
+    </div>
+    
+  </div>
 </body>
 </html>
