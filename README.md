@@ -1,14 +1,14 @@
 # jquery-autosave
 
-    //simple
+    // simple
     $("input").autosave();
 
-Watches change events on all inputs, POSTing their values to your backend.
+Watches change events on all inputs, POST-ing their values to your backend.
 
-    //awesomeness
+    // awesomeness
     $(".autosave").autosave({ url:"/save", done:function(){}, fail:function(){} });
 
-POST the values and data-* attrs of any element to your "/save" uri and optionally write callbacks just like $.ajax
+Use a class and when those elements change, they will POST their values and data-* attrs to your url and include callbacks just like $.ajax
 
 
 ## Options
