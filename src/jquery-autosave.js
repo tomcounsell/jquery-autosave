@@ -49,9 +49,13 @@ jQuery.fn.autosave = function(options){
           cache:    false,
           data:     data,
           dataType: options.type
-        }).done(function(){   $this.trigger('autosave-done');
-        }).fail(function(){   $this.trigger('autosave-fail');
-        }).always(function(){ $this.trigger('autosave-always');
+        }).done(function(data){   
+            $this.data('autosave-response', data)
+            $this.trigger('autosave-done');
+        }).fail(function(){
+            $this.trigger('autosave-fail');
+        }).always(function(){ 
+            $this.trigger('autosave-always');
         });
         return true;
         
