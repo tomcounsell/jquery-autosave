@@ -367,12 +367,17 @@ $('.autosave').autosave({
           },
           done:   function(){
             console.log("done saving "+$(this).attr('name')+" = "+$(this).val());
+            console.log($(this).data('autosave-response'));
+            console.log($(this).data('autosave-status'));
           },
           fail:   function(){
             console.log("failed saving "+$(this).attr('name')+" = "+$(this).val());
+            console.log($(this).data('autosave-status'));
+            console.log($(this).data('autosave-error'));
           },
           always: function(){
             console.log("finished processsing "+$(this).attr('name')+" = "+$(this).val());
+            console.log($(this).data('autosave-status'));
           }
         });
         
