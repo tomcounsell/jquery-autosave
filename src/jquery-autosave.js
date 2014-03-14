@@ -1,6 +1,6 @@
 ;(function( $, window, document, undefined ){
   
-var pluginName = 'autosave'
+var pluginName = 'autosave';
 var defaults = {
   url:    "",
   method: "POST",
@@ -63,12 +63,15 @@ Plugin.prototype.init = function(){
         cache:    false,
         data:     data,
         dataType: options.type
-      }).done(function(data){   
-          $this.data('autosave-response', data)
+      }).done(function(response, textStatus, jqXHR){
+          $this.data('autosave-response', response);
+          $this.data('autosave-status', {'text':jqXHR.statusText, 'code':jqXHR.status});
           $this.trigger('autosave-done');
-      }).fail(function(){
+      }).fail(function(jqXHR, textStatus, errorThrown){
+          $this.data('autosave-status', {'text':jqXHR.statusText, 'code':jqXHR.status});
+          $this.data('autosave-error', errorThrown);
           $this.trigger('autosave-fail');
-      }).always(function(){ 
+      }).always(function(){
           $this.trigger('autosave-always');
       });
 
@@ -80,13 +83,24 @@ Plugin.prototype.init = function(){
   // before, done, fail, always use init_options 
   // so as to not be overwritten by inline_options
   if (init_options.done){
-    $this.on('autosave-done', function(){ options.done.call($this) });
+    $this.on('autosave-done', function(){ 
+      var response  = $this.data('autosave-response');
+      var status    = $this.data('autosave-status');
+      options.done.call($this, response, status) ;
+    });
   }
   if (init_options.fail){
-    $this.on('autosave-fail', function(){ options.fail.call($this) });
+    $this.on('autosave-fail', function(){ 
+      error     = $this.data('autosave-error');
+      status    = $this.data('autosave-status');
+      options.fail.call($this, error, status);
+    });
   }
   if (init_options.always){
-    $this.on('autosave-always', function(){ options.always.call($this) });
+    $this.on('autosave-always', function(){ 
+      status    = $this.data('autosave-status');
+      options.always.call($this, status);
+    });
   }
 
   function getDataAttributes($element){
