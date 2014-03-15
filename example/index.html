@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>jquery-autosave</title>
+  <title>jquery-autosave by Tom Counsell</title>
   
   <!--javascript-->
   <script type="application/javascript" src="jquery-1.9.1.min.js"></script>
@@ -41,6 +41,7 @@
     }
     h3{margin-top: 40px;}
     .success, .fail{display: none;}
+    .comment{color: #9DA0A4;}
   </style>
 </head>
   
@@ -55,13 +56,13 @@
     </p>
 
     <h3>How to use jquery-autosave (inline setup)</h3>
-      <pre>&lt;script&gt;
+      <pre><span class="comment">&lt;script&gt;</span>
   $("input").autosave();
-&lt;/script&gt;</pre>
+<span class="comment">&lt;/script&gt;</span></pre>
     
     <p><strong>That was easy!</strong>
       <br>
-      But don't forget to load jquery and this plugin found at src/jquery-autosave.js</p>
+      Just don't forget to include jquery and this plugin.</p>
     
     <div class="example" data-content="EXAMPLE 1">
       <p>Set up your input fields with the data-url attributes:</p>
@@ -109,7 +110,7 @@
     </div>  
     <pre>/my_backend_uri?name=my-input&value=original%20value&something_else=extra%20information</pre>
 
-    <h3>How to use jquery-autosave (js setup), Tom's preferred method</h3>
+    <h3>How to use jquery-autosave (js setup)</h3>
     <p>
       When you have several inputs you want to autosave, repeating the same data-* attributes is not usually the best practice. Consider including some settings when you apply the plugin.
     </p>
@@ -224,11 +225,11 @@
     <div class="example" data-content="EXAMPLE">
       <p>Edit the selector to specify which elements should autosave. It's not just for input fields!</p>
     </div>
-    <pre>&lt;!--html--&gt;
+    <pre><span class='comment'>&lt;!--html--&gt;</span>
 &lt;textarea name="my-textarea" class="autosave"&gt;&lt;/textarea&gt;
 &lt;select name="my-dropdown-select" class="autosave"/&gt;...&lt;/select&gt;
 
-//js
+<span class='comment'>//js</span>
 $(".autosave").autosave({url:"/my_backend_uri"});
 </pre>
     
@@ -268,11 +269,11 @@ $(".autosave").autosave({url:"/my_backend_uri"});
         });
       </script>
     </div>
-    <pre>&lt;!--html--&gt;
+    <pre><span class='comment'>&lt;!--html--&gt;</span>
 &lt;input type="text" name="input1" value="" placeholder="try me!"
     data-url="my_backend"/&gt;
 
-//js
+<span class='comment'>//js</span>
 $('input').autosave(
   {done:function(){alert('saved!')}}
 );
@@ -309,20 +310,20 @@ $('input').autosave(
         });
       </script>
     </div>
-    <pre>&lt;!--html--&gt;
+    <pre><span class='comment'>&lt;!--html--&gt;</span>
 &lt;button class="autosave" data-clicks="0"&gt;Click Me&lt;/button&gt;
 
-//js
+<span class='comment'>//js</span>
 $('.autosave').autosave({
     url:      "my_backend_uri",
     event:    "click",
     before:   function(){
-                  //increment the clicks counter before sending
+                  <span class='comment'>//increment the clicks counter before sending</span>
                   var clicks = $(this).attr('data-clicks');
                   $(this).attr('data-clicks', parseInt(clicks)+1);
               },
     done:     function(){
-                  //if successful, update the front-end
+                  <span class='comment'>//if successful, update the front-end</span>
                   $('#num_clicks').html($(this).attr('data-clicks'));
               }
 });
@@ -398,6 +399,15 @@ $('.autosave').autosave({
       </script>
     </div>
     
+    <br><br>
+    <div class="footer">
+      <p>This project is maintained by <a href="https://github.com/tomcounsell">tomcounsell</a>
+        <br>
+        forked long ago from
+        <a href="http://github.com/cfurrow/jquery.autosave.js">cfurrow/jquery.autosave.js</a>
+      </p>
+      <p><small>Hosted on GitHub Pages</small></p>
+    </div>
   </div>
 </body>
 </html>
