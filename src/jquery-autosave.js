@@ -63,16 +63,21 @@ Plugin.prototype.init = function(){
         cache:    false,
         data:     data,
         dataType: options.type
-      }).done(function(response, textStatus, jqXHR){
-          $this.data('autosave-response', response);
-          $this.data('autosave-status', {'text':jqXHR.statusText, 'code':jqXHR.status});
-          $this.trigger('autosave-done');
-      }).fail(function(jqXHR, textStatus, errorThrown){
-          $this.data('autosave-status', {'text':jqXHR.statusText, 'code':jqXHR.status});
-          $this.data('autosave-error', errorThrown);
-          $this.trigger('autosave-fail');
-      }).always(function(){
-          $this.trigger('autosave-always');
+      })
+      .done(function(data, textStatus, jqXHR){
+        $this.data('autosave-data', data);
+        $this.data('autosave-textStatus', textStatus);
+        $this.data('autosave-jqXHR', jqXHR);
+        $this.trigger('autosave-done');
+      })
+      .fail(function(jqXHR, textStatus, errorThrown){
+        $this.data('autosave-jqXHR', jqXHR);
+        $this.data('autosave-textStatus', textStatus);
+        $this.data('autosave-errorThrown', errorThrown);
+        $this.trigger('autosave-fail');
+      })
+      .always(function(){
+        $this.trigger('autosave-always');
       });
 
     }else{
@@ -83,23 +88,24 @@ Plugin.prototype.init = function(){
   // before, done, fail, always use init_options 
   // so as to not be overwritten by inline_options
   if (init_options.done){
-    $this.on('autosave-done', function(){ 
-      var response  = $this.data('autosave-response');
-      var status    = $this.data('autosave-status');
-      options.done.call($this, response, status) ;
+    $this.on('autosave-done', function(){
+      var data        = $this.data('autosave-data');
+      var textStatus  = $this.data('autosave-textStatus');
+      var jqXHR       = $this.data('autosave-jqXHR');
+      options.done.call($this, data, textStatus, jqXHR);
     });
   }
   if (init_options.fail){
     $this.on('autosave-fail', function(){ 
-      error     = $this.data('autosave-error');
-      status    = $this.data('autosave-status');
-      options.fail.call($this, error, status);
+      var jqXHR       = $this.data('autosave-jqXHR');
+      var textStatus  = $this.data('autosave-textStatus');
+      var errorThrown = $this.data('autosave-errorThrown');
+      options.fail.call($this, jqXHR, textStatus, errorThrown);
     });
   }
   if (init_options.always){
-    $this.on('autosave-always', function(){ 
-      status    = $this.data('autosave-status');
-      options.always.call($this, status);
+    $this.on('autosave-always', function(){
+      options.always.call($this);
     });
   }
 
