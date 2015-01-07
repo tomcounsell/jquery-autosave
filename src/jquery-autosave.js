@@ -117,9 +117,9 @@ Plugin.prototype.init = function(){
     
 
     $($element[0].attributes).each(function(){
-      if(data_attribute_regex.test(this.nodeName)){
-        attribute_name = data_attribute_regex.exec(this.nodeName)[1]
-        data_attributes[attribute_name] = this.nodeValue;
+      if(data_attribute_regex.test(this.name)){
+        attribute_name = data_attribute_regex.exec(this.name)[1]
+        data_attributes[attribute_name] = this.value;
       }
     });
     
