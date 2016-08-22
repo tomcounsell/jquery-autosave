@@ -351,6 +351,10 @@ $('.autosave').autosave({
         <li>
           <input id="test3" class="autosave-test" name="test3" placeholder="test3">
         </li>
+        <li>
+          <input id="test4" class="autosave-test" name="test4" type="checkbox">
+          True?
+        </li>
       </ul>
       
       <script>
@@ -395,6 +399,8 @@ $('.autosave').autosave({
             console.log("finished processsing "+$(this).attr('name')+" = "+$(this).val());
           }
         });
+        
+        $('#test4').autosave();
         
       </script>
     </div>
