@@ -112,7 +112,11 @@ Plugin.prototype.init = function(){
   function getDataAttributes($element){
     var data_attribute_regex = /^data\-(\w+)$/;
     var data_attributes = {};
-    data_attributes.value = $element.val() || "";
+    if($element.is(':checkbox')){
+      data_attributes.value = $element.prop('checked')
+    }else{
+      data_attributes.value = $element.val() || "";  
+    }
     data_attributes.name  = $element.attr('name') || "";
     
 
